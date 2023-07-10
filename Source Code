@@ -1,0 +1,322 @@
+
+create table farmer_details
+(
+farmer_id int,
+farmer_name varchar(30),
+area_of_land int,
+ph_no int,
+primary key(farmer_id)
+);
+
+insert into farmer_details values (6780,'Venkat',7,87638901);
+insert into farmer_details values (2539,'Srinivas',9,67923510);
+insert into farmer_details values (7631,'Ramu',3,91638271);
+insert into farmer_details values (4563,'Laxman',10,74109532);
+insert into farmer_details values (9841,'Pratap',4,81560091);
+insert into farmer_details values (1452,'Akash',6,88991725);
+insert into farmer_details values (5382,'Subbu',12,71829722);
+insert into farmer_details values (7639,'Phani',2,90001827);
+select * from farmer_details;
+
+
+create table location
+(
+ pincode int,
+ farmer_id int,
+ village varchar(30),
+ mandal varchar(30),
+ district varchar(30),
+ primary key(pincode),
+ foreign key(farmer_id) references farmer_details(farmer_id)
+);
+insert into location values
+(100231,6780,'Lakkavaram','Huzurnagar','Suryapet');
+insert into location values
+(342103,7631,'Annaram','Tripuraram','Nalgonda');
+insert into location values
+(562891,7639,'Raghunadhapalem','Tirumalapalem','Khammem');
+insert into location values
+(539291,5382,'Lingampally','Chilpur','Jangaon');
+insert into location values
+(429183,4563,'Rudraram','Yellareddy','Kamareddy');
+insert into location values
+(579392,9841,'Paidipalli','Velgatoor','Jagitial');
+insert into location values
+(478291,1452,'Chintarevula','Dharur','Gadwal');
+insert into location values
+(578246,2539,'Mailaram','Gannervaram','Karimnagar');
+select * from location;
+
+
+create table crop_details
+(
+crop_variety varchar(30),
+type_of_crop varchar(30),
+estimated_yield_kilosperhectare int,
+primary key(crop_variety)
+);
+insert into crop_details values('R101','Rice',25);
+insert into crop_details values('M402','Rice',20);
+insert into crop_details values('D527','Basmati Rice',15);
+insert into crop_details values('W321','Wheat',30);
+insert into crop_details values('B323','Barley',20);
+insert into crop_details values('R302','Rice',15);
+insert into crop_details values('M322','Maize',25);
+insert into crop_details values('S324','Sorghum',23);
+insert into crop_details values('M327','Millet',15);
+insert into crop_details values('C358','Cotton',40);
+select * from crop_details;
+
+
+create table crop
+(
+farmer_id int,
+crop_variety varchar(30),
+foreign key(farmer_id) references farmer_details(farmer_id),
+foreign key(crop_variety) references crop_details(crop_variety)
+);
+insert into crop values(7631,'R101');
+insert into crop values(6780,'M402');
+insert into crop values(2539,'D527');
+insert into crop values(4563,'W321');
+insert into crop values(4563,'B323');
+insert into crop values(9841,'R302');
+insert into crop values(1452,'M322');
+insert into crop values(5382,'S324');
+insert into crop values(7639,'M327');
+insert into crop values(4563,'C358');
+insert into crop values(5382,'W321');
+select * from crop;
+
+
+create table loan
+(
+transaction_id int,
+amount int,
+farmer_id int,
+primary key(transaction_id),
+foreign key(farmer_id) references farmer_details(farmer_id)
+);
+insert into loan values(372812,10000,6780);
+insert into loan values(891023,20000,2539);
+insert into loan values(718309,15000,7631);
+insert into loan values(182911,25000,4563);
+insert into loan values(982043,5500,9841);
+insert into loan values(671957,7000,1452);
+insert into loan values(558923,9000,5382);
+insert into loan values(820192,20000,7639);
+select * from loan;
+
+
+create table loan_by_bank
+(
+transaction_id int,
+interest_rate int,
+time_period int,
+primary key(transaction_id),
+foreign key (transaction_id) references loan(transaction_id)
+);
+insert into loan_by_bank values(372812,5,3);
+insert into loan_by_bank values(820192,4,6);
+insert into loan_by_bank values(891023,8,10);
+insert into loan_by_bank values(182911,5,8);
+insert into loan_by_bank values(671957,3,2);
+select * from loan_by_bank;
+
+
+create table loan_by_person
+(
+transaction_id int,
+interest_rate int,
+time_period int,
+primary key(transaction_id),
+foreign key (transaction_id) references loan(transaction_id)
+);
+insert into loan_by_person values(558923,2,2);
+insert into loan_by_person values(718309,5,6);
+insert into loan_by_person values(982043,2,1);
+select * from loan_by_person;
+
+
+create table soil_data
+(
+soil_type varchar(30),
+pincode int,
+soil_ph int,
+n_per int,
+p_per int,
+k_per int,
+micronutrients int,
+primary key(soil_type),
+foreign key(pincode) references location(pincode)
+);
+insert into soil_data values('Red Soil',100231,8,3,5,4,20);
+insert into soil_data values('Clay',429183,7,6,3,9,35);
+insert into soil_data values('Sand',539291,6,6,6,7,22);
+insert into soil_data values('Black Soil',578246,8,4,5,7,18);
+insert into soil_data values('Silty soil',478291,9,5,8,7,24);
+insert into soil_data values('Loamy Soil',342103,6,3,4,2,12);
+insert into soil_data values('Alluvial Soil',579392,7,6,12,9,34);
+insert into soil_data values('Laterite Soil',562891,8,5,7,10,28);
+select * from soil_data;
+
+
+create table fertilizers
+(
+fertilizer_name varchar(30),
+amountpurchased_litperhec int,
+primary key(fertilizer_name,amountpurchased_litperhec)
+);
+insert into fertilizers values('Nitrogenous fertilizer',3);
+insert into fertilizers values('Phosphorous fertilizer',4);
+insert into fertilizers values('Potassium fertilizer',2);
+insert into fertilizers values('Zinc fertilizer',4);
+insert into fertilizers values('Magnesium fertilizer',1);
+insert into fertilizers values('Boron fertilizer',2);
+insert into fertilizers values('Sulfer fertilizer',1);
+insert into fertilizers values('Calcium fertilizer',2);
+select * from fertilizers;
+
+
+create table soil_fer
+(
+soil_type varchar(30),
+fertilizer_name varchar(30),
+amountpurchased_litperhec int,
+foreign key(soil_type) references soil_data(soil_type),
+foreign key(fertilizer_name,amountpurchased_litperhec) references
+fertilizers(fertilizer_name,amountpurchased_litperhec)
+);
+insert into soil_fer values('Black Soil','Magnesium fertilizer',1);
+insert into soil_fer values('Alluvial Soil','Nitrogenous fertilizer',3);
+insert into soil_fer values('Laterite Soil','Sulfer fertilizer',1);
+insert into soil_fer values('Clay','Potassium fertilizer',2);
+insert into soil_fer values('Red Soil','Calcium fertilizer',2);
+insert into soil_fer values('Sand','Boron fertilizer',2);
+insert into soil_fer values('Silty soil','Phosphorous fertilizer',4);
+insert into soil_fer values('Loamy Soil','Zinc fertilizer',4);
+select * from soil_fer;
+
+
+create table pesticides
+(
+pesticide_name varchar(30),
+amountpurchased_litperhec int,
+primary key(pesticide_name,amountpurchased_litperhec)
+);
+insert into pesticides values('Public health pesticide',20);
+insert into pesticides values('Miticide',21);
+insert into pesticides values('Fungicide',19);
+insert into pesticides values('Insecticide',17);
+insert into pesticides values('Store pest inscticide',8);
+insert into pesticides values('Rodenticide',13);
+insert into pesticides values('Herbicide',28);
+insert into pesticides values('Ethion',17);
+select * from pesticides;
+
+
+create table soil_pest
+(
+soil_type varchar(30),
+pesticide_name varchar(30),
+amountpurchased_litperhec int,
+foreign key(soil_type) references soil_data(soil_type),
+foreign key(pesticide_name,amountpurchased_litperhec) references
+pesticides(pesticide_name,amountpurchased_litperhec)
+);
+insert into soil_pest values('Black Soil','Insecticide',17);
+insert into soil_pest values('Alluvial Soil','Store pest inscticide',8);
+insert into soil_pest values('Laterite Soil','Public health pesticide',20);
+insert into soil_pest values('Clay','Ethion',17);
+insert into soil_pest values('Red Soil','Herbicide',28);
+insert into soil_pest values('Sand','Fungicide',19);
+insert into soil_pest values('Silty soil','Rodenticide',13);
+insert into soil_pest values('Loamy Soil','Public health pesticide',20);
+select * from soil_pest;
+
+
+create table seed
+(
+crop_variety varchar(30),
+name_seed varchar(30),
+amount_kilosperhec int,
+primary key(crop_variety,name_seed,amount_kilosperhec),
+foreign key(crop_variety) references crop_details(crop_variety)
+);
+insert into seed values('R101','Rice 1',12);
+insert into seed values('M402','Rice 2',10);
+insert into seed values('D527','Basmati 1',15);
+insert into seed values('W321','Wheat 1',20);
+insert into seed values('B323','Barley 1',10 );
+insert into seed values('R302','Rice 3',16);
+insert into seed values('M322','Maize 1',14);
+insert into seed values('S324','Sorghum 1',18);
+insert into seed values('M327','Millet 1',12);
+insert into seed values('C358','Cotton 1',8);
+select * from seed;
+
+
+create table season (
+farmer_id int,
+crop_variety varchar(30),
+season_name varchar(30),
+type_of_irrigation varchar(30),
+primary
+key(farmer_id,crop_variety,season_name,type_of_irrigation),
+foreign key(crop_variety) references crop_details(crop_variety),
+foreign key(farmer_id) references farmer_details(farmer_id)
+);
+insert into season values(9841,'R101','Summer','Sprinkler');
+insert into season values(1452,'M402','Winter','Manual');
+insert into season values(6780,'D527','Rainy','Pump System');
+insert into season values(5382,'W321','Winter','Drip');
+insert into season values(4563,'B323','Summer','Drip');
+insert into season values(2539,'R302','Rainy','Drip');
+insert into season values(7639,'M322','Rainy','Pump System');
+insert into season values(4563,'S324','Summer','Drip');
+insert into season values(2539,'M327','Winter','Center Pivot');
+insert into season values(7631,'C358','Summer','Sprinkler');
+select * from season;
+
+
+create table exports
+(
+exp_id int,
+farmer_id int,
+crop_variety varchar(30),
+fertilizer_name varchar(30),
+amountpurchased_litperhec_fer int,
+pesticide_name varchar(30),
+amountpurchased_litperhec_pest int,
+itemname varchar(30),
+place varchar(30),
+quantity varchar(30),
+primary key(exp_id),
+foreign key(farmer_id) references farmer_details(farmer_id),
+foreign key(crop_variety) references crop_details(crop_variety),
+foreign key(fertilizer_name,amountpurchased_litperhec_fer)
+references fertilizers(fertilizer_name,amountpurchased_litperhec),
+foreign key(pesticide_name,amountpurchased_litperhec_pest)
+references pesticides(pesticide_name,amountpurchased_litperhec)
+);
+insert into exports values(24622,6780,'R101','Nitrogenous
+fertilizer',3,'Public health pesticide',20,'Rice','USA','10 kgs');
+insert into exports values(45366,2539,'M402','Phosphorous
+fertilizer',4,'Miticide',21,'Rice','UK','15 kgs');
+insert into exports values(12535,7631,'D527','Potassium
+fertilizer',2,'Fungicide',19,'Basmati Rice','Australia','20 kgs');
+insert into exports values(75422,4563,'W321','Zinc
+fertilizer',4,'Insecticide',17,'Wheat','USA','25 kgs');
+insert into exports values(98492,9841,'B323','Magnesium
+fertilizer',1,'Store pest inscticide',8,'Barley','UK','30 kgs');
+insert into exports values(74933,1452,'R302','Boron
+fertilizer',2,'Rodenticide',13,'Rice','Austalia','25 kgs');
+insert into exports values(29592,5382,'M322','Sulfer
+fertilizer',1,'Herbicide',28,'Maize','Africa','20 kgs');
+insert into exports values(75952,7639,'S324','Calcium
+fertilizer',2,'Ethion',17,'Sorghum','China','18 kgs');
+insert into exports values(27840,9841,'M327','Zinc
+fertilizer',4,'Miticide',21,'Millet','Russia','25 kgs');
+insert into exports values(66381,2539,'C358','Magnesium
+fertilizer',1,'Insecticide',17,'Cotton','Italy','30 kgs');
+select * from exports;
